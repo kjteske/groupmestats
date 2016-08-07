@@ -1,3 +1,10 @@
+# Downloaded GroupMe message images
+message-*.jpeg
+message-*.png
+
+# Generate stats html
+most_hearted*.html
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

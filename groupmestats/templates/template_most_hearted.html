@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+  <title>{{ group }}: Most Hearted Messages</title>
+</head>
+<body>
+  <h1>{{ group }}: Most Hearted Messages</h1>
+
+  <dl>
+    {% for message in messages %}
+      <h3>{{ loop.index }}. {{ message.author }}, {{ message.favorited_by|length }} hearts, {{ message.created_at|string }} </h3>
+      {% for image in message.images %}
+        <img src="{{ image.link }}" width="{{ image.width }}" height="{{ image.height }}"/>
+      {% endfor %}
+      {% if message.text %}
+        <br/>
+        {{ message.text }}
+      {% endif %}
+    {% endfor %}
+  </dl>
+</body>
+</html>
