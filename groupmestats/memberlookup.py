@@ -8,8 +8,9 @@ from ._config import DATA_DIR
 _MANUAL_FILENAME = os.path.join(DATA_DIR, "members.yaml")
 _AUTO_FILENAME = os.path.join(DATA_DIR, "members-generated.yaml")
 
+class MemberNotFoundError(RuntimeError): pass
 
-def get_member_name(user_id):
+def id_to_author(user_id):
     filename = _MANUAL_FILENAME if os.path.isfile(_MANUAL_FILENAME) else _AUTO_FILENAME
     try:
         with open(filename, "r") as members_file:
@@ -21,7 +22,15 @@ def get_member_name(user_id):
         for member in groupy.Member.list():
             if user_id == member.user_id:
                 return member.nickname
-    raise RuntimeError("Could not find user_id '%s'" % user_id)
+    raise MemberNotFoundError("Could not find user_id '%s'" % user_id)
+
+
+def message_to_author(message):
+    try:
+        return id_to_author(message.user_id)
+    except MemberNotFoundError:
+        # @todo: print warning?
+        return message.name
 
 
 def gstat_gen_members():

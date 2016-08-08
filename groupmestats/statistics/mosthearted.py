@@ -3,7 +3,7 @@ import os
 import jinja2
 import PIL
 
-from ..memberlookup import get_member_name
+from ..memberlookup import message_to_author
 from ..statistic import statistic
 
 
@@ -58,7 +58,7 @@ class MostHearted(object):
 
     def show(self):
         for message in self._most_hearted:
-            message.author = get_member_name(message.user_id)
+            message.author = message_to_author(message)
             message.images = []
             for i, attachment in enumerate(message.attachments):
                 if attachment.type != "image": continue
