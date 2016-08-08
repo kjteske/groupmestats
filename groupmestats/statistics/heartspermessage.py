@@ -1,5 +1,9 @@
+import plotly
+from plotly.graph_objs import Bar, Figure, Layout
+
 from ..memberlookup import message_to_author
 from ..statistic import statistic
+from .._config import plotly_sign_in, PlotlySignInError
 
 
 class RunningTotal(object):
@@ -38,3 +42,49 @@ class HeartsPerMessage(object):
                  (total.author, total.average(),
                   total.num_hearts, total.num_messages))
 
+def try_saving_plotly_figure(figure, filename):
+    try:
+        plotly.plotly.image.save_as(figure, filename)
+    except plotly.exceptions.PlotlyError:
+        print("Failed to save plotly figure. Credentials probably not configured correctly?")
+
+@statistic
+class HeartsPerMessagePlot(HeartsPerMessage):
+    def _plot_messages_and_hearts(self):
+        totals = sorted(self._totals, key=lambda total: total.author)
+        x_axis = [total.author for total in totals]
+        num_hearts = Bar(
+            x=x_axis,
+            y=[total.num_hearts for total in totals],
+            name='Number of Hearts'
+        )
+        num_messages = Bar(
+            x=x_axis,
+            y=[total.num_messages for total in totals],
+            name='Number of messages'
+        )
+        data = [num_messages, num_hearts]
+        layout = Layout(barmode='group', title="Messages and Hearts by Author")
+        figure = Figure(data=data, layout=layout)
+        try_saving_plotly_figure(figure, "MessagesAndHearts.png")
+
+    def _plot_average_hearts_per_message(self):
+        totals = sorted(self._totals, key=lambda total: total.author)
+        x_axis = [total.author for total in totals]
+        hearts_per_message = Bar(
+            x=x_axis,
+            y=[total.average() for total in totals],
+            name='Average hearts / message'
+        )
+        data = [hearts_per_message]
+        layout = Layout(title="Hearts per Message")
+        figure = Figure(data=data, layout=layout)
+        try_saving_plotly_figure(figure, "HeartsPerMessage.png")
+
+    def show(self):
+        try:
+            plotly_sign_in()
+        except PlotlySignInError:
+            return
+        self._plot_messages_and_hearts()
+        self._plot_average_hearts_per_message()

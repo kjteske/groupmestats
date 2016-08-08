@@ -13,6 +13,13 @@ Once you have `python3` installed, follow these instructions to get
 - Install the required `groupmestats` module: `pip install --editable <directory containing setup.py>`
 - Follow the instructions on setting up your GroupMe API key to be discoverable
   by the `groupy` module: http://groupy.readthedocs.io/en/latest/pages/installation.html
+- For statistics that generate plotly plots, create an account at
+  `https://plot.ly/`, and create the file
+  `<home>/.groupmestats/plotly_credentials.yaml` with your username and plotly
+  sign-in key, e.g.:
+
+      username: kjteske
+      key: notmyactualkey
 
 ## Fetch data from GroupMe server
 

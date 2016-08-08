@@ -16,6 +16,7 @@ if __name__ == '__main__':
             'GroupyAPI',
             'jinja2',
             'Pillow',
+            'plotly',
             'PyYAML',
         ],
         entry_points={
