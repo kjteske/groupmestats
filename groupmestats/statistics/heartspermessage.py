@@ -24,6 +24,7 @@ class HeartsPerMessage(object):
         id_to_totals = {}
         for message in messages:
             user_id = message.user_id
+            if user_id == "system": continue
             if user_id not in id_to_totals:
                 id_to_totals[user_id] = RunningTotal(message_to_author(message))
             id_to_totals[user_id].add_message(message)

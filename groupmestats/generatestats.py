@@ -19,6 +19,7 @@ def gstat_stats():
     for stat in stats:
         output_html_filename = stat.show()
         try:
-            webbrowser.open_new_tab(output_html_filename)
+            # webbrowser.open_new_tab(output_html_filename)
+            pass
         except:
             pass
