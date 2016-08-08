@@ -62,9 +62,9 @@ Similary, you can run `gstat_gen_members` to generate
     - {nickname: Kyle Teske, user_id: '180617'}
 
 You can edit the nickname that shows up in statistics, which may be useful
-if people change their names often, or just have weird names that you don't like.
-Copy `members-generated.yaml` to `<home>/.groupmestats/members.yaml` and edit
-`members.yaml`, e.g.:
+if people change their names often, or just have weird names that you don't like. Bots don't get generated automatically, so you may have to add those
+manually. Copy `members-generated.yaml` to
+`<home>/.groupmestats/members.yaml` and edit `members.yaml`, e.g.:
 
     members:
     - {nickname: Kyle 'Cool' Teske, user_id: '180617'}
