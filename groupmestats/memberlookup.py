@@ -10,7 +10,7 @@ _AUTO_FILENAME = os.path.join(DATA_DIR, "members-generated.yaml")
 
 class MemberNotFoundError(RuntimeError): pass
 
-def id_to_author(user_id):
+def id_to_name(user_id):
     filename = _MANUAL_FILENAME if os.path.isfile(_MANUAL_FILENAME) else _AUTO_FILENAME
     try:
         with open(filename, "r") as members_file:
@@ -27,7 +27,7 @@ def id_to_author(user_id):
 
 def message_to_author(message):
     try:
-        return id_to_author(message.user_id)
+        return id_to_name(message.user_id)
     except MemberNotFoundError:
         # @todo: print warning?
         return message.name
