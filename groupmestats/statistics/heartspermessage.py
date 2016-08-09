@@ -3,7 +3,6 @@ from plotly.graph_objs import Bar, Figure, Layout
 
 from ..memberlookup import message_to_author
 from ..statistic import statistic
-from .._config import plotly_sign_in, PlotlySignInError
 
 
 class RunningTotal(object):
@@ -45,8 +44,12 @@ class HeartsPerMessage(object):
 def try_saving_plotly_figure(figure, filename):
     try:
         plotly.plotly.image.save_as(figure, filename)
-    except plotly.exceptions.PlotlyError:
-        print("Failed to save plotly figure. Credentials probably not configured correctly?")
+    except plotly.exceptions.PlotlyError as e:
+        if 'The response from plotly could not be translated.'in str(e):
+            print("Failed to save plotly figure. <home>/.plotly/.credentials"
+                  " probably not configured correctly?")
+        else:
+            raise
 
 @statistic
 class HeartsPerMessagePlot(HeartsPerMessage):
@@ -82,9 +85,5 @@ class HeartsPerMessagePlot(HeartsPerMessage):
         try_saving_plotly_figure(figure, "HeartsPerMessage.png")
 
     def show(self):
-        try:
-            plotly_sign_in()
-        except PlotlySignInError:
-            return
         self._plot_messages_and_hearts()
         self._plot_average_hearts_per_message()
