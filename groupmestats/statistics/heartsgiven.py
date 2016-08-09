@@ -9,7 +9,7 @@ class RunningTotal(object):
 
 @statistic
 class HeartsGiven(object):
-    def calculate(self, group, messages):
+    def calculate(self, group, messages, **kwargs):
         # Don't look up name from file each time through the loop
         # because it's very slow.
         id_to_totals = {}

@@ -16,6 +16,9 @@ def gstat_stats():
                               % ", ".join(all_statistics.keys())))
     parser.add_argument("--all-stats", action="store_true", default=False,
                         help="Generate all possible stats.")
+    parser.add_argument("--ignore-user", dest="ignore_users", default=[],
+                        action="append",
+                        help="User to ignore. May be specified more than once.")
     args = parser.parse_args()
     stats = [stat_class() for name, stat_class in all_statistics.items()
                                     if args.all_stats or name in args.stats]
@@ -25,7 +28,7 @@ def gstat_stats():
 
     (group, messages) = GroupSerializer.load(args.group_name)
     for stat in stats:
-        stat.calculate(group, messages)
+        stat.calculate(group, messages, ignore_users=args.ignore_users)
     for stat in stats:
         output_html_filename = stat.show()
         try:

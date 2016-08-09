@@ -21,7 +21,7 @@ class RunningTotal(object):
 
 @statistic
 class HeartsPerMessage(object):
-    def calculate(self, group, messages):
+    def calculate(self, group, messages, ignore_users=[], **kwargs):
         # Don't look up author from file each time through the loop
         # because it's very slow.
         id_to_totals = {}

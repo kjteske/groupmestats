@@ -28,7 +28,7 @@ class MostHearted(object):
     def __init__(self, num_to_show=5):
         self._num_to_show = num_to_show
 
-    def calculate(self, group, messages):
+    def calculate(self, group, messages, **kwargs):
         heart_ordered = sorted(messages, reverse=True,
                                key=lambda message: len(message.favorited_by))
         num_to_show = min(self._num_to_show, len(messages))
