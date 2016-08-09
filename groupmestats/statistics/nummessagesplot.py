@@ -38,7 +38,7 @@ class NumMessagesPlot(object):
         )
         data = [num_messages]
         layout = Layout(
-            title="Messages Sent",
+            title="%s - Messages Sent" % self._group_name,
             autosize=False,
             width=30*len(x_axis) + 300,
             height=800,

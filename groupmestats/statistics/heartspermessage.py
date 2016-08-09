@@ -56,7 +56,7 @@ class HeartsPerMessagePlot(HeartsPerMessage):
         )
         data = [hearts_per_message]
         layout = Layout(
-            title="Hearts Per Message",
+            title="%s - Hearts Per Message" % self._group_name,
             autosize=False,
             width=30*len(x_axis) + 300,
             height=800,

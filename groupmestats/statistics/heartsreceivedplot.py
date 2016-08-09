@@ -40,7 +40,7 @@ class HeartsReceivedPlot(object):
         )
         data = [hearts_received]
         layout = Layout(
-            title="Hearts Received",
+            title="%s - Hearts Received" % self._group_name,
             autosize=False,
             width=30*len(x_axis) + 300,
             height=800,
