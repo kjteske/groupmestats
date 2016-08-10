@@ -3,3 +3,4 @@ from .heartsreceivedplot import *
 from .heartsgiven import *
 from .mosthearted import *
 from .nummessagesplot import *
+from .whoheartswhoplot import *
