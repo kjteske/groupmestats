@@ -1,3 +1,5 @@
+import os
+
 from plotly.graph_objs import Bar, Figure, Layout, Scatter
 
 from ..memberlookup import message_to_author, id_to_name
@@ -86,8 +88,9 @@ class WhoHeartsWhoPlot(object):
         self._author_names.sort()
         self._group_name = group.name
 
-
     def show(self):
+        if not os.path.exists(self._group_name):
+            os.mkdir(self._group_name)
         for hearter in self._id_to_hearters.values():
             self._plot_hearter(hearter)
 
@@ -183,5 +186,6 @@ class WhoHeartsWhoPlot(object):
             barmode='overlay',
         )
         figure = Figure(data=data, layout=layout)
-        try_saving_plotly_figure(figure, "%s - %s - Hearts Given.png" %
-                                        (self._group_name, hearter_name))
+        filename = os.path.join(self._group_name, "%s - %s - Hearts Given.png" %
+                                                (self._group_name, hearter_name))
+        try_saving_plotly_figure(figure, filename)

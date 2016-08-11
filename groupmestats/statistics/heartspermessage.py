@@ -1,3 +1,5 @@
+import os
+
 from plotly.graph_objs import Bar, Figure, Layout
 
 from ..memberlookup import message_to_author, id_to_name
@@ -47,6 +49,9 @@ class HeartsPerMessage(object):
 @statistic
 class HeartsPerMessagePlot(HeartsPerMessage):
     def show(self):
+        if not os.path.exists(self._group_name):
+            os.mkdir(self._group_name)
+
         x_axis = [total.author for total in self._totals]
         y_axis = [total.average() for total in self._totals]
         hearts_per_message = Bar(
@@ -70,6 +75,6 @@ class HeartsPerMessagePlot(HeartsPerMessage):
                 ) for xi, yi in zip(x_axis, y_axis)]
         )
         figure = Figure(data=data, layout=layout)
-        try_saving_plotly_figure(figure,
-                                 "%s_Hearts Per Message.png"
-                                 % self._group_name)
+        filename = os.path.join(self._group_name, "%s - Hearts Per Message.png"
+                                                   % self._group_name)
+        try_saving_plotly_figure(figure, filename)

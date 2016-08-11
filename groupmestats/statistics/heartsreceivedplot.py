@@ -1,3 +1,5 @@
+import os
+
 from plotly.graph_objs import Bar, Figure, Layout
 
 from ..memberlookup import message_to_author, id_to_name
@@ -31,6 +33,8 @@ class HeartsReceivedPlot(object):
         self._group_name = group.name
 
     def show(self):
+        if not os.path.exists(self._group_name):
+            os.mkdir(self._group_name)
         x_axis = [total.author for total in self._totals]
         y_axis = [total.hearts_received for total in self._totals]
         hearts_received = Bar(
@@ -54,6 +58,6 @@ class HeartsReceivedPlot(object):
                 ) for xi, yi in zip(x_axis, y_axis)]
         )
         figure = Figure(data=data, layout=layout)
-        try_saving_plotly_figure(figure,
-                                 "%s_Hearts Received.png"
-                                 % self._group_name)
+        filename = os.path.join(self._group_name, "%s - Hearts Received.png"
+                                                   % self._group_name)
+        try_saving_plotly_figure(figure, filename)
