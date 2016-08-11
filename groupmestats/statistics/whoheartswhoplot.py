@@ -227,6 +227,6 @@ class WhoHeartsWhoPlot(object):
             yaxis=dict(title="Percent of Author's Messages Hearted"),
         )
         figure = Figure(data=data, layout=layout)
-        filename = os.path.join(self._group_name, "%s - %s - Hearts Given.png" %
+        filename = os.path.join(self._group_name, "%s - Hearts Given - %s.png" %
                                                 (self._group_name, hearter_name))
         try_saving_plotly_figure(figure, filename)
