@@ -6,6 +6,9 @@ from ..memberlookup import message_to_author, id_to_name
 from ..statistic import statistic
 from ..plotly_helpers import marker, try_saving_plotly_figure
 
+def average(the_list):
+    return float(sum(the_list)) / len(the_list)
+
 def remove_user_id_keys(id_to_foo_dict, ignore_users):
     ids_to_del = []
     for user_id in id_to_foo_dict.keys():
@@ -96,7 +99,7 @@ class WhoHeartsWhoPlot(object):
 
     def _calc_group_percent_hearted(self, author):
         all_heart_counts = author.hearter_id_to_count.values()
-        hearts_per_user = float(sum(all_heart_counts)) / len(all_heart_counts)
+        hearts_per_user = average(all_heart_counts)
         return 100 * hearts_per_user / author.num_messages
 
     def _plot_hearter(self, hearter):
@@ -147,22 +150,46 @@ class WhoHeartsWhoPlot(object):
             name="Group Avg % Hearted",
             opacity=0.6,
         )
-        avg_percent_hearted = float(sum(percent_hearted_y)) / len(percent_hearted_y)
+        avg_percent_hearted = average(percent_hearted_y)
         percent_hearted_avg_line = Scatter(
             x=[x_axis[0], x_axis[-1]],
             y=[avg_percent_hearted, avg_percent_hearted],
             name="%s's Avg %% Hearted" % hearter_name,
             marker=dict(color=darker_pinkish),
         )
-        group_avg_percent_hearted = float(sum(group_percent_hearted_y)) / len(group_percent_hearted_y)
+        group_avg_percent_hearted = average(group_percent_hearted_y)
         group_percent_hearted_avg_line = Scatter(
             x=[x_axis[0], x_axis[-1]],
             y=[group_avg_percent_hearted, group_avg_percent_hearted],
             name="Group Avg % Hearted",
             marker=dict(color=dark_blueish),
         )
-        data = [percent_hearted_bar, group_percent_hearted_bar,
-                percent_hearted_avg_line,group_percent_hearted_avg_line]
+
+        # Show what you would expect to heart for each person.
+        # If the group hearts 20% of all messages, and you heart 40%,
+        # then for any given author, you would expect to heart twice as many
+        # of their messages as the group average.
+        scale_factor = avg_percent_hearted / group_avg_percent_hearted
+        expected_percent_hearted_bar = Bar(
+            x=x_axis,
+            y=[avg_percent * scale_factor
+               for avg_percent in group_percent_hearted_y],
+            marker=dict(
+                color="transparent",
+                line=dict(
+                    color='Black',
+                    width=1.0,
+                ),
+            ),
+            name="%s's Expected Heart %%" % hearter_name,
+        )
+        data = [
+            percent_hearted_bar,
+            group_percent_hearted_bar,
+            expected_percent_hearted_bar,
+            percent_hearted_avg_line,
+            group_percent_hearted_avg_line,
+        ]
         annotations=[
             dict(x=xi, y=yi,
                  text="%.1f%%" % yi,
@@ -170,13 +197,6 @@ class WhoHeartsWhoPlot(object):
                  yanchor='bottom',
                  showarrow=False,
             ) for xi, yi in zip(x_axis, percent_hearted_y)]
-        annotations.extend(
-            dict(x=xi, y=yi,
-                 text="%.1f%%" % yi,
-                 xanchor='center',
-                 yanchor='bottom',
-                 showarrow=False,
-            ) for xi, yi in zip(x_axis, group_percent_hearted_y))
         layout = Layout(
             title="%s - %s's Hearts Given" % (self._group_name, hearter_name),
             annotations=annotations,
