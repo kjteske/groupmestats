@@ -59,8 +59,20 @@ class WhoHeartsWhoPlot(object):
     def calculate(self, group, messages, ignore_users=[], **kwargs):
         self._id_to_authors = {}
         self._id_to_hearters = {}
+
+        # Preloading the dicts is easier than adding them as we go
+        # Iterate through both members and author. A little overkill,
+        # bots don't show up in members, and people who never write a messaage
+        # don't show up messages. We'll get key errors later on for
+        # any messages/hearts by user_id's that we skip.
         for member in group.members():
             user_id = member.user_id
+            if user_id == "system": continue
+            self._id_to_authors[user_id] = Author(user_id)
+            self._id_to_hearters[user_id] = Hearter(user_id)
+        for message in messages:
+            user_id = message.user_id
+            if user_id == "system": continue
             self._id_to_authors[user_id] = Author(user_id)
             self._id_to_hearters[user_id] = Hearter(user_id)
 
