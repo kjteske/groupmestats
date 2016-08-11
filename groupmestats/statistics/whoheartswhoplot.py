@@ -193,7 +193,7 @@ class WhoHeartsWhoPlot(object):
         )
         data = [
             percent_hearted_bar,
-            group_percent_hearted_bar,
+            # group_percent_hearted_bar, # Sometimes this looks messy
             expected_percent_hearted_bar,
             percent_hearted_avg_line,
             group_percent_hearted_avg_line,
