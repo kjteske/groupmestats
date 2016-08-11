@@ -6,7 +6,9 @@ def try_saving_plotly_figure(figure, filename):
     except plotly.exceptions.PlotlyError as e:
         if 'The response from plotly could not be translated.'in str(e):
             print("Failed to save plotly figure. <home>/.plotly/.credentials"
-                  " probably not configured correctly?")
+                  " might not be configured correctly? "
+                  "Or you may have hit your plotly account's rate limit"
+                  " (http://help.plot.ly/api-rate-limits/)")
         else:
             raise
 
