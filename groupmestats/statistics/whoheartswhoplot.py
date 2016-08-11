@@ -7,6 +7,8 @@ from ..statistic import statistic
 from ..plotly_helpers import marker, try_saving_plotly_figure
 
 def average(the_list):
+    if not the_list:
+        return 0
     return float(sum(the_list)) / len(the_list)
 
 def remove_user_id_keys(id_to_foo_dict, ignore_users):
@@ -100,6 +102,8 @@ class WhoHeartsWhoPlot(object):
     def _calc_group_percent_hearted(self, author):
         all_heart_counts = author.hearter_id_to_count.values()
         hearts_per_user = average(all_heart_counts)
+        if author.num_messages == 0:
+            return 0
         return 100 * hearts_per_user / author.num_messages
 
     def _plot_hearter(self, hearter):
@@ -110,7 +114,11 @@ class WhoHeartsWhoPlot(object):
         author_name_to_group_percent_hearted = {}
         for author_id, hearts_given_to_author in hearter.author_id_to_count.items():
             author = self._id_to_authors[author_id]
-            percent_hearted = 100 * float(hearts_given_to_author) / author.num_messages
+            if author.num_messages == 0:
+                percent_hearted = 0
+            else:
+                percent_hearted = (100 * float(hearts_given_to_author)
+                                                    / author.num_messages)
             author_name_to_percent_hearted[author.name] = percent_hearted
             print("%s hearted %.1f%% (%d / %d) of %s's messages" %
                  (hearter_name, percent_hearted, hearts_given_to_author,
