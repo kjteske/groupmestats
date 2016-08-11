@@ -2,6 +2,9 @@
 message-*.jpeg
 message-*.png
 
+# Generated images
+*.png
+
 # Generate stats html
 most_hearted*.html
 
