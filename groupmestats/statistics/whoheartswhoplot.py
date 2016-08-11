@@ -204,6 +204,7 @@ class WhoHeartsWhoPlot(object):
             width=30*len(x_axis) + 300,
             height=800,
             barmode='overlay',
+            yaxis=dict(title="Percent of Author's Messages Hearted"),
         )
         figure = Figure(data=data, layout=layout)
         filename = os.path.join(self._group_name, "%s - %s - Hearts Given.png" %

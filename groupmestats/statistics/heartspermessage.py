@@ -61,7 +61,7 @@ class HeartsPerMessagePlot(HeartsPerMessage):
         )
         data = [hearts_per_message]
         layout = Layout(
-            title="%s - Hearts Per Message" % self._group_name,
+            title="%s - Average Hearts Received Per Message" % self._group_name,
             autosize=False,
             width=30*len(x_axis) + 300,
             height=800,
@@ -72,7 +72,8 @@ class HeartsPerMessagePlot(HeartsPerMessage):
                      xanchor='center',
                      yanchor='bottom',
                      showarrow=False,
-                ) for xi, yi in zip(x_axis, y_axis)]
+                ) for xi, yi in zip(x_axis, y_axis)],
+            yaxis=dict(title="Number of Hearts"),
         )
         figure = Figure(data=data, layout=layout)
         filename = os.path.join(self._group_name, "%s - Hearts Per Message.png"

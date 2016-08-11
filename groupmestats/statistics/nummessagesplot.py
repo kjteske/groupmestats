@@ -42,7 +42,7 @@ class NumMessagesPlot(object):
         )
         data = [num_messages]
         layout = Layout(
-            title="%s - Messages Sent" % self._group_name,
+            title="%s - Total Messages Sent" % self._group_name,
             autosize=False,
             width=30*len(x_axis) + 300,
             height=800,
@@ -53,7 +53,8 @@ class NumMessagesPlot(object):
                      xanchor='center',
                      yanchor='bottom',
                      showarrow=False,
-                ) for xi, yi in zip(x_axis, y_axis)]
+                ) for xi, yi in zip(x_axis, y_axis)],
+            yaxis=dict(title="Number of Messages"),
         )
         figure = Figure(data=data, layout=layout)
         filename = os.path.join(self._group_name, "%s - Messages Sent.png"

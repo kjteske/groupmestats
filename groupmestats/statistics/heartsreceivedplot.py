@@ -44,7 +44,7 @@ class HeartsReceivedPlot(object):
         )
         data = [hearts_received]
         layout = Layout(
-            title="%s - Hearts Received" % self._group_name,
+            title="%s - Total Hearts Received" % self._group_name,
             autosize=False,
             width=30*len(x_axis) + 300,
             height=800,
@@ -55,7 +55,8 @@ class HeartsReceivedPlot(object):
                      xanchor='center',
                      yanchor='bottom',
                      showarrow=False,
-                ) for xi, yi in zip(x_axis, y_axis)]
+                ) for xi, yi in zip(x_axis, y_axis)],
+            yaxis=dict(title="Hearts Received"),
         )
         figure = Figure(data=data, layout=layout)
         filename = os.path.join(self._group_name, "%s - Hearts Received.png"
