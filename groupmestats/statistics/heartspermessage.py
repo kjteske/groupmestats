@@ -68,7 +68,7 @@ class HeartsPerMessagePlot(HeartsPerMessage):
             showlegend=False,
             annotations=[
                 dict(x=xi, y=yi,
-                     text="%.3f" % yi,
+                     text="%.2f" % yi,
                      xanchor='center',
                      yanchor='bottom',
                      showarrow=False,
