@@ -149,7 +149,9 @@ class WhoHeartsWhoPlot(object):
         pinkish = "#ff6699"
         darker_pinkish = "#ff0066"
         dark_blueish = "#3333cc"
+        greenish = "#009900"
 
+        # Show % Hearted with the value on top of the bar
         percent_hearted_bar = Bar(
             x=x_axis,
             y=percent_hearted_y,
@@ -160,22 +162,24 @@ class WhoHeartsWhoPlot(object):
             name="%s's Avg %% Hearted" % hearter_name,
             opacity=0.6,
         )
-        group_percent_hearted_bar = Bar(
-            x=x_axis,
-            y=group_percent_hearted_y,
-            marker=dict(
-                color="transparent",
-                line=dict(color='Blue', width=2.0),
-            ),
-            name="Group Avg % Hearted",
-            opacity=0.6,
-        )
+        percent_hearted_annotations = [
+            dict(x=xi, y=yi,
+                 text="%.1f%%" % yi,
+                 xanchor='center',
+                 yanchor='bottom',
+                 showarrow=False,
+            ) for xi, yi in zip(x_axis, percent_hearted_y)
+        ]
+
+        # Show lines of hearter's and group's overall average
         avg_percent_hearted = average(percent_hearted_y)
         percent_hearted_avg_line = Scatter(
             x=[x_axis[0], x_axis[-1]],
             y=[avg_percent_hearted, avg_percent_hearted],
             name="%s's Avg %% Hearted" % hearter_name,
-            marker=dict(color=darker_pinkish),
+            marker=dict(color=greenish),
+            line=dict(dash="dot", width=0.75),
+            mode='lines',
         )
         group_avg_percent_hearted = average(group_percent_hearted_y)
         group_percent_hearted_avg_line = Scatter(
@@ -183,40 +187,92 @@ class WhoHeartsWhoPlot(object):
             y=[group_avg_percent_hearted, group_avg_percent_hearted],
             name="Group Avg % Hearted",
             marker=dict(color=dark_blueish),
+            line=dict(dash="dot", width=0.75),
+            mode='lines',
         )
 
-        # Show what you would expect to heart for each person.
+        # Show dashed lines as what you would expect to heart for each person.
         # If the group hearts 20% of all messages, and you heart 40%,
         # then for any given author, you would expect to heart twice as many
         # of their messages as the group average.
+        # Do this by an annotation of just a big dash. To make this
+        # show up on the legend, create a fake plot with the same color.
         scale_factor = avg_percent_hearted / group_avg_percent_hearted
-        expected_percent_hearted_bar = Bar(
-            x=x_axis,
-            y=[avg_percent * scale_factor
-               for avg_percent in group_percent_hearted_y],
-            marker=dict(
-                color="transparent",
-                line=dict(
-                    color='Black',
-                    width=1.0,
-                ),
-            ),
-            name="%s's Expected Heart %%" % hearter_name,
-        )
-        data = [
-            percent_hearted_bar,
-            # group_percent_hearted_bar, # Sometimes this looks messy
-            expected_percent_hearted_bar,
-            percent_hearted_avg_line,
-            group_percent_hearted_avg_line,
-        ]
-        annotations=[
+        expected_percent_hearted_color = greenish
+        expected_percent_hearted_y = [avg_percent * scale_factor
+                                    for avg_percent in group_percent_hearted_y]
+        expected_percent_hearted_line_annotations = [
             dict(x=xi, y=yi,
-                 text="%.1f%%" % yi,
+                text="--",
+                font=dict(color=expected_percent_hearted_color, size=36),
+                xanchor='center',
+                yanchor='middle',
+                showarrow=False,
+                borderwidth=0,
+                borderpad=0,
+            ) for xi, yi in zip(x_axis, expected_percent_hearted_y)
+        ]
+        expected_percent_hearted_fake_for_legend = Scatter(
+            x=[x_axis[0]],
+            y=[0],
+            name = "%s's Expected Heart %%" % hearter_name,
+            line=dict(color=expected_percent_hearted_color, dash='dash'),
+            mode='lines',
+        )
+
+        # Same fake annotation line / fake plot for group avg.
+        group_avg_percent_color = "Blue"
+        group_avg_percent_hearted_line_annotations = [
+            dict(x=xi, y=yi,
+                 text="--",
+                 font=dict(color=group_avg_percent_color, size=36),
                  xanchor='center',
                  yanchor='bottom',
                  showarrow=False,
-            ) for xi, yi in zip(x_axis, percent_hearted_y)]
+            ) for xi, yi in zip(x_axis, group_percent_hearted_y)
+        ]
+        group_avg_percent_hearted_fake_for_legend = Scatter(
+            x=[x_axis[0]],
+            y=[0],
+            name = "Group Avg % Hearted",
+            line=dict(color=group_avg_percent_color, dash='dash'),
+            mode='lines',
+        )
+
+        arrow_annotations = []
+        max_percent_hearted = max(percent_hearted_y)
+        for i in range(len(x_axis)):
+            if percent_hearted_y[i] <= expected_percent_hearted_y[i]:
+                continue # don't draw arrow if less hearts than expected
+            # Draw arrow from expected pointed up to percent_hearted
+            ay = (expected_percent_hearted_y[i]
+                    - float(max_percent_hearted) / 80)
+            if percent_hearted_y[i] <= ay: continue
+            arrow_annotation = dict(
+                x=x_axis[i], y=percent_hearted_y[i],
+                text="",
+                xanchor="center",
+                yanchor="bottom",
+                showarrow=True,
+                arrowcolor=greenish,
+                arrowwidth=2,
+                ay=ay,
+                ayref="y",
+                ax=0,
+            )
+            arrow_annotations.append(arrow_annotation)
+        data = [
+            percent_hearted_bar,
+            expected_percent_hearted_fake_for_legend,
+            percent_hearted_avg_line,
+            group_avg_percent_hearted_fake_for_legend,
+            group_percent_hearted_avg_line,
+
+        ]
+        annotations = (percent_hearted_annotations
+                       + group_avg_percent_hearted_line_annotations
+                       + expected_percent_hearted_line_annotations
+                       + arrow_annotations)
         layout = Layout(
             title="%s - %s's Hearts Given" % (self._group_name, hearter_name),
             annotations=annotations,
