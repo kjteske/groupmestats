@@ -199,8 +199,8 @@ class WhoHeartsWhoPlot(object):
         # show up on the legend, create a fake plot with the same color.
         scale_factor = avg_percent_hearted / group_avg_percent_hearted
         expected_percent_hearted_color = greenish
-        expected_percent_hearted_y = [avg_percent * scale_factor
-                                    for avg_percent in group_percent_hearted_y]
+        expected_percent_hearted_y = [group_percent * scale_factor
+                                      for group_percent in group_percent_hearted_y]
         expected_percent_hearted_line_annotations = [
             dict(x=xi, y=yi,
                 text="--",
@@ -227,7 +227,7 @@ class WhoHeartsWhoPlot(object):
                  text="--",
                  font=dict(color=group_avg_percent_color, size=36),
                  xanchor='center',
-                 yanchor='bottom',
+                 yanchor='middle',
                  showarrow=False,
             ) for xi, yi in zip(x_axis, group_percent_hearted_y)
         ]
