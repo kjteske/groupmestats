@@ -2,6 +2,7 @@ import plotly
 
 def try_saving_plotly_figure(figure, filename):
     try:
+        print("Saving plot to '%s'" % filename)
         plotly.plotly.image.save_as(figure, filename)
     except plotly.exceptions.PlotlyError as e:
         if 'The response from plotly could not be translated.'in str(e):
