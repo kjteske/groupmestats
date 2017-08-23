@@ -25,7 +25,7 @@ class ScaledImage(object):
 
 @statistic
 class MostHearted(object):
-    def __init__(self, num_to_show=5):
+    def __init__(self, num_to_show=10):
         self._num_to_show = num_to_show
 
     def calculate(self, group, messages, **kwargs):
