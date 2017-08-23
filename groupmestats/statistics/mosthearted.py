@@ -52,6 +52,8 @@ class MostHearted(object):
             image_type = "png"
         elif ".jpeg." in attachment.url:
             image_type = "jpeg"
+        elif ".gif." in attachment.url:
+            image_type = "gif"
         else:
             raise RuntimeError("unknown format '%s'" % attachment.url)
         return "message-%s-%i.%s" % (message.id, i, image_type)
