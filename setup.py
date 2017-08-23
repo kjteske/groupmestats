@@ -26,6 +26,7 @@ if __name__ == '__main__':
                 'gstat_gen_members = groupmestats.memberlookup:gstat_gen_members',
                 'gstat_help = groupmestats.help:gstat_help',
                 'gstat_stats = groupmestats.generatestats:gstat_stats',
+                'gstat_timeline = groupmestats.statistics:messagetimelineplot.gstat_timeline_main',
             ],
         },
     )
