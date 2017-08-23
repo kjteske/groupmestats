@@ -280,6 +280,7 @@ class WhoHeartsWhoPlot(object):
             width=30*len(x_axis) + 300,
             height=800,
             barmode='overlay',
+            xaxis=dict(tickangle=35),
             yaxis=dict(title="Percent of Author's Messages Hearted"),
         )
         figure = Figure(data=data, layout=layout)
