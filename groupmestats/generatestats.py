@@ -22,6 +22,8 @@ def gstat_stats():
     args = parser.parse_args()
     stats = [stat_class() for name, stat_class in all_statistics.items()
                                     if args.all_stats or name in args.stats]
+
+    print("args: %s" % str(args))
     if not stats:
         parser.print_help()
         raise RuntimeError("Must specify a valid --stat or use --all-stats")
