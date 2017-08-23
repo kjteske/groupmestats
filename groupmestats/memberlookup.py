@@ -1,9 +1,11 @@
+import argparse
 import os
 
 import groupy
 import yaml
 
 from ._config import DATA_DIR
+from groupmestats.grouplookup import get_group
 
 _MANUAL_FILENAME = os.path.join(DATA_DIR, "members.yaml")
 _AUTO_FILENAME = os.path.join(DATA_DIR, "members-generated.yaml")
@@ -48,12 +50,24 @@ def message_to_author(message):
 
 
 def gstat_gen_members():
+    parser = argparse.ArgumentParser(description="Generates members file")
+    parser.add_argument("-g", "--group", dest="group_name", required=True,
+                        help="Group name")
+    args = parser.parse_args()
+    gstat_gen_members_for_group(args.group_name)
+
+
+def gstat_gen_members_for_group(group_name):
+    group = get_group(group_name)
     members = []
-    for member in groupy.Member.list():
+    for member in group.members():
         members.append({
-            "nickname" : member.nickname,
-            "user_id" : member.user_id,
+            "nickname": member.nickname,
+            "user_id": member.user_id,
         })
     members.sort(key=lambda member: member["nickname"])
-    with open(_AUTO_FILENAME, "w") as members_file:
-        yaml.dump({"members" : members}, members_file)
+    filename = os.path.join(DATA_DIR,
+                            "members-generated-%s.yaml" % group.group_id)
+    print("Writing members to %s" % filename)
+    with open(filename, "w") as members_file:
+        yaml.dump({"members": members}, members_file)

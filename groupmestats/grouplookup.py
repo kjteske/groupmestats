@@ -8,6 +8,13 @@ from ._config import DATA_DIR
 _MANUAL_FILENAME = os.path.join(DATA_DIR, "groups.yaml")
 _AUTO_FILENAME = os.path.join(DATA_DIR, "groups-generated.yaml")
 
+def get_group(group_name):
+    """ Return groupy.Group """
+    for group in groupy.Group.list():
+        if group_name == group.name:
+            return group
+    raise RuntimeError("Could not find group '%s'" % group_name)
+
 
 def get_group_id(group_name):
     filename = _MANUAL_FILENAME if os.path.isfile(_MANUAL_FILENAME) else _AUTO_FILENAME
