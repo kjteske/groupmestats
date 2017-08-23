@@ -29,6 +29,7 @@ def gstat_stats():
         raise RuntimeError("Must specify a valid --stat or use --all-stats")
 
     (group, messages) = GroupSerializer.load(args.group_name)
+    group.name = args.group_name
     for stat in stats:
         stat.calculate(group, messages, ignore_users=args.ignore_users)
     for stat in stats:
