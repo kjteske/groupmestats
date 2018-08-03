@@ -4,6 +4,7 @@ import plotly
 def try_saving_plotly_figure(figure, filename):
     try:
         print("Saving plot to '%s'" % filename)
+        # plotly.offline.plot(figure, image_filename=filename, image='png', auto_open=False)
         plotly.plotly.image.save_as(figure, filename)
     except plotly.exceptions.PlotlyError as e:
         if 'The response from plotly could not be translated.'in str(e):

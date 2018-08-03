@@ -17,13 +17,10 @@ Once you have `python3` installed, follow these instructions to get
   https://plot.ly/, and follow the instructions at
   https://plot.ly/python/getting-started/ to create
   `<home>/.plotly/.credentials` with your username and API key.
-- On MacOS, I've had trouble with Pillow version and jpeg decoders. After
-  some combination of uninstalling pillow (`pip uninstall pillow`),
-  installing libjpeg via brew ('brew install libjpeg'), and then trying
-  again with the installer from http://ethan.tira-thompson.com/Mac_OS_X_Ports.html,
-  and finally changing editing <python env>/site-packages/GroupyAPI-0.7.1.dist-info/METADATA
-  to change the line `Requires-Dist: Pillow (==2.5.3)` to `Requires-Dist: Pillow (==4.2.1)`,
-  I managed to get things working.
+- May want to modify `try_saving_plotly_figure()` in `plotly_helpers.py` to
+  use `plotly.offline` to avoid plotly rate-limiting, but I haven't figured
+  out how to programmatically save images as .png's from that yet - can only
+  save as HTML div's.
 
 ## Fetch data from GroupMe server
 

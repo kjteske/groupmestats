@@ -4,7 +4,7 @@ import os
 import groupy
 import yaml
 
-from ._config import DATA_DIR
+from ._config import DATA_DIR, get_groupme_token
 from groupmestats.grouplookup import get_group
 
 _MANUAL_FILENAME = os.path.join(DATA_DIR, "members.yaml")
@@ -61,9 +61,10 @@ def gstat_gen_members():
 
 
 def gstat_gen_members_for_group(group_name):
-    group = get_group(group_name)
+    client = groupy.Client.from_token(get_groupme_token())
+    group = get_group(client, group_name)
     members = []
-    for member in group.members():
+    for member in group.members:
         members.append({
             "nickname": member.nickname,
             "user_id": member.user_id,

@@ -1,16 +1,17 @@
 import os
 
 import jinja2
-import PIL
+from PIL import Image as PILImage
 
 from ..memberlookup import message_to_author
 from ..statistic import statistic
+from ..groupmeclient import get_groupme_client
 
 
 class ScaledImage(object):
     def __init__(self, image_filename, max_height=200, max_width=200):
         self.link = image_filename
-        pil_image = PIL.Image.open(image_filename)
+        pil_image = PILImage.open(image_filename)
         (self.width, self.height) = pil_image.size
         if self.height > max_height:
             self._resize(float(max_height) / self.height)
@@ -30,6 +31,7 @@ class MostHearted(object):
         self._num_to_show = num_to_show
 
     def calculate(self, group, messages, **kwargs):
+        client = get_groupme_client()
         heart_ordered = sorted(messages, reverse=True,
                                key=lambda message: len(message.favorited_by))
         num_to_show = min(self._num_to_show, len(messages))
@@ -42,9 +44,9 @@ class MostHearted(object):
                 if os.path.isfile(filename):
                     # Already downloaded, don't need to be slow and get it again
                     continue
-                image = attachment.download()
+                image_data = client.images.download(attachment)
                 with open(filename, "wb") as f:
-                    image.save(f)
+                    f.write(image_data)
         self._group_name = group.name
 
     def _get_image_filename(self, message, i):

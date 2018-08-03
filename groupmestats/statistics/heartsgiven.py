@@ -25,7 +25,7 @@ class HeartsGiven(object):
                     self._id_to_totals[user_id] = RunningTotal(user_id)
                 self._id_to_totals[user_id].num_hearts_given += 1
 
-        for member in group.members():
+        for member in group.members:
             user_id = member.user_id
             if user_id == "system": continue
             if id_to_name(user_id) in ignore_users: continue

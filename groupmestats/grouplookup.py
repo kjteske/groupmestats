@@ -3,7 +3,8 @@ import os
 import groupy
 import yaml
 
-from ._config import DATA_DIR
+from ._config import DATA_DIR, get_groupme_token
+from .groupmeclient import get_groupme_client
 
 _MANUAL_FILENAME = os.path.join(DATA_DIR, "groups.yaml")
 _AUTO_FILENAME = os.path.join(DATA_DIR, "groups-generated.yaml")
@@ -11,7 +12,8 @@ _AUTO_FILENAME = os.path.join(DATA_DIR, "groups-generated.yaml")
 
 def get_group(group_name):
     """ Return groupy.Group """
-    for group in groupy.Group.list():
+    client = get_groupme_client()
+    for group in client.groups.list():
         if group_name == group.name:
             return group
     raise RuntimeError("Could not find group '%s'" % group_name)
@@ -26,7 +28,8 @@ def get_group_id(group_name):
                 if group_name in group["names"]:
                     return group["group_id"]
     except FileNotFoundError:
-        for group in groupy.Group.list():
+        client = get_groupme_client()
+        for group in client.groups.list():
             if group_name == group.name:
                 return group.group_id
     raise RuntimeError("Could not find group '%s'" % group_name)
@@ -34,7 +37,8 @@ def get_group_id(group_name):
 
 def gstat_gen_groups():
     groups = []
-    for group in groupy.Group.list():
+    client = get_groupme_client()
+    for group in client.groups.list():
         groups.append({
             "group_id" : group.group_id,
             "names" : [group.name],

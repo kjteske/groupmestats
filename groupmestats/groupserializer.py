@@ -2,16 +2,13 @@ import argparse
 import os
 import pickle
 
-import groupy
-
+from .groupmeclient import get_groupme_client
 from .grouplookup import get_group_id
 from ._config import DATA_DIR
 
 
 def _get_all_messages(group):
-    messages = group.messages()
-    while messages.iolder():
-        pass
+    messages = [message for message in group.messages.list_all()]
     return messages
 
 
@@ -58,7 +55,8 @@ def gstat_fetch_data():
         parser.print_help()
         raise RuntimeError("Must specify one of --group or --all")
 
-    for group in groupy.Group.list():
+    client = get_groupme_client()
+    for group in client.groups.list():
         if group.name in args.skips:
             continue
         if args.all or group.name in args.groups:

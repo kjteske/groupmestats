@@ -70,7 +70,7 @@ class WhoHeartsWhoPlot(object):
         # bots don't show up in members, and people who never write a messaage
         # don't show up messages. We'll get key errors later on for
         # any messages/hearts by user_id's that we skip.
-        for member in group.members():
+        for member in group.members:
             user_id = member.user_id
             if user_id == "system": continue
             self._id_to_authors[user_id] = Author(user_id)
