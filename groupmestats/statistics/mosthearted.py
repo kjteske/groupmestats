@@ -18,6 +18,7 @@ class ScaledImage(object):
             self._resize(float(max_width) / self.width)
         self.height = int(self.height)
         self.width = int(self.width)
+
     def _resize(self, scale):
         self.height *= scale
         self.width *= scale

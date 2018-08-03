@@ -6,10 +6,12 @@ from ..memberlookup import message_to_author, id_to_name
 from ..statistic import statistic
 from ..plotly_helpers import marker, try_saving_plotly_figure
 
+
 def average(the_list):
     if not the_list:
         return 0
     return float(sum(the_list)) / len(the_list)
+
 
 def remove_user_id_keys(id_to_foo_dict, ignore_users):
     ids_to_del = []
@@ -18,6 +20,7 @@ def remove_user_id_keys(id_to_foo_dict, ignore_users):
             ids_to_del.append(user_id)
     for id_to_del in ids_to_del:
         del id_to_foo_dict[id_to_del]
+
 
 class Author(object):
     def __init__(self, user_id):
@@ -38,6 +41,7 @@ class Author(object):
     def remove_ignored(self, ignore_users):
         remove_user_id_keys(self.hearter_id_to_count, ignore_users)
 
+
 class Hearter(object):
     def __init__(self, user_id):
         self.user_id = user_id
@@ -53,6 +57,7 @@ class Hearter(object):
 
     def remove_ignored(self, ignore_users):
         remove_user_id_keys(self.author_id_to_count, ignore_users)
+
 
 @statistic
 class WhoHeartsWhoPlot(object):

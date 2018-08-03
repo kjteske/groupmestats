@@ -1,9 +1,9 @@
 import argparse
-import webbrowser
 
 from .groupserializer import GroupSerializer
 from .statistic import all_statistics
 from .statistics import *
+
 
 def gstat_stats():
     parser = argparse.ArgumentParser(description="Generates stats for a group")

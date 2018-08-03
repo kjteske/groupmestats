@@ -1,5 +1,6 @@
 import plotly
 
+
 def try_saving_plotly_figure(figure, filename):
     try:
         print("Saving plot to '%s'" % filename)

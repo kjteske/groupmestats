@@ -8,6 +8,7 @@ from ._config import DATA_DIR
 _MANUAL_FILENAME = os.path.join(DATA_DIR, "groups.yaml")
 _AUTO_FILENAME = os.path.join(DATA_DIR, "groups-generated.yaml")
 
+
 def get_group(group_name):
     """ Return groupy.Group """
     for group in groupy.Group.list():

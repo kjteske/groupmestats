@@ -10,7 +10,10 @@ from groupmestats.grouplookup import get_group
 _MANUAL_FILENAME = os.path.join(DATA_DIR, "members.yaml")
 _AUTO_FILENAME = os.path.join(DATA_DIR, "members-generated.yaml")
 
-class MemberNotFoundError(RuntimeError): pass
+
+class MemberNotFoundError(RuntimeError):
+    pass
+
 
 class MemberLookup(object):
     def __init__(self):
