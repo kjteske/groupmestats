@@ -78,6 +78,7 @@ class WhoHeartsWhoPlot(object):
         for message in messages:
             user_id = message.user_id
             if user_id == "system": continue
+            if message.name in ignore_users: continue
             self._id_to_authors[user_id] = Author(user_id)
             self._id_to_hearters[user_id] = Hearter(user_id)
 
@@ -91,6 +92,7 @@ class WhoHeartsWhoPlot(object):
         for message in messages:
             author_id = message.user_id
             if author_id == "system": continue
+            if message.name in ignore_users: continue
             self._id_to_authors[author_id].add_message(message)
             for hearter_id in message.favorited_by:
                 self._id_to_hearters[hearter_id].add_message(message)
